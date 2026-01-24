@@ -117,6 +117,7 @@ public class Dao extends DriverAccessor{
 			if(rs.first()){
 				article.setId( rs.getInt("id") );
 				article.setTitle( rs.getString("title") );
+				article.setweather( rs.getString("weather") );
 				article.setBody( rs.getString("body") );
 				article.setEditorId( rs.getString("editor_id") );
 				article.setEntryDatetime( rs.getTimestamp("entry_datetime") );
@@ -151,6 +152,7 @@ public class Dao extends DriverAccessor{
 			if(rs.first()){
 				article.setId( rs.getInt("id") );
 				article.setTitle( rs.getString("title") );
+				article.setweather( rs.getString("weather") );
 				article.setBody( rs.getString("body") );
 				article.setEditorId( rs.getString("editor_id") );
 				article.setEntryDatetime( rs.getTimestamp("entry_datetime"));
@@ -177,12 +179,13 @@ public class Dao extends DriverAccessor{
 		this.connection= this.createConnection();
 
 		try{
-			String sql = "insert into article (title, body, editor_id, entry_datetime) values(?, ?, ?, now())";
+			String sql = "insert into article (title, ,weather,body, editor_id, entry_datetime) values(?, ?, ?, now())";
 			PreparedStatement stmt = this.connection.prepareStatement(sql);
 
 			stmt.setString(1, article.getTitle());
-			stmt.setString(2, article.getBody());
-			stmt.setString(3, article.getEditorId());
+			stmt.setString(2, article.getweather());
+			stmt.setString(3, article.getBody());
+			stmt.setString(4, article.getEditorId());
 
 			stmt.executeUpdate();
 			stmt.close();
@@ -213,7 +216,7 @@ public class Dao extends DriverAccessor{
 			if(rs.first()){
 				do{
 					//DBから取得した値を引数としてArticleを作成
-					Article s = new Article( rs.getInt("id"), rs.getString("title"), rs.getString("body"), rs.getString("editor_id"), rs.getTimestamp("entry_datetime") );
+					Article s = new Article( rs.getInt("id"), rs.getString("weather"),rs.getString("title"), rs.getString("body"), rs.getString("editor_id"), rs.getTimestamp("entry_datetime") );
 					//返り値用リストに追加
 					articleList.add(s);
 				}while(rs.next()); //最後の1件まで繰り返す
@@ -264,15 +267,16 @@ public class Dao extends DriverAccessor{
 	
 	
 	//自作部分
-	public void insertMyData(String data, String data2) {
+	public void insertMyData(String data, String data2,String data3) {
 		this.connection = this.createConnection();
 
 		try{
-			String sql = "insert into mydata (data, data2, entry_datetime) values(?, ?, now())";
+			String sql = "insert into mydata (data, data2,data3, entry_datetime) values(?, ?, now())";
 			PreparedStatement stmt = this.connection.prepareStatement(sql);
 
 			stmt.setString(1, data);
 			stmt.setString(2, data2);
+			stmt.setString(3, data3);
 
 			stmt.executeUpdate();
 			stmt.close();
@@ -301,7 +305,7 @@ public class Dao extends DriverAccessor{
 				if(rs.first()){
 					do{
 						//DBから取得した値を引数としてMyDataを作成
-						MyData md = new MyData( rs.getInt("id"), rs.getString("data"), rs.getString("data2"), rs.getTimestamp("entry_datetime") );
+						MyData md = new MyData( rs.getInt("id"), rs.getString("data"), rs.getString("data2"), rs.getString("data3"),  rs.getTimestamp("entry_datetime") );
 						//返り値用リストに追加
 						myDataList.add(md);
 					}while(rs.next()); //最後の1件まで繰り返す
